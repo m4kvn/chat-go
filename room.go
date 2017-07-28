@@ -8,16 +8,11 @@ import (
 )
 
 type room struct {
-	// 他のクライアントに転送するためのメッセージを保持するチャネル
-	forward chan []byte
-	// チャットルームに参加しようとしているクライアントのためのチャネル
-	join    chan *client
-	// チャットルームから退室しようとしているクライアントのためのチャネル
-	leave   chan *client
-	// 在室している全てのクライアントが保持される
-	clients map[*client]bool
-	// チャットルーム上で行われた操作のログを受け取る
-	tracer  trace.Tracer
+	forward chan []byte      // 他のクライアントに転送するためのメッセージを保持するチャネル
+	join    chan *client     // チャットルームに参加しようとしているクライアントのためのチャネル
+	leave   chan *client     // チャットルームから退室しようとしているクライアントのためのチャネル
+	clients map[*client]bool // 在室している全てのクライアントが保持される
+	tracer  trace.Tracer     // チャットルーム上で行われた操作のログを受け取る
 }
 
 func newRoom() *room {
@@ -26,6 +21,7 @@ func newRoom() *room {
 		join:    make(chan *client),
 		leave:   make(chan *client),
 		clients: make(map[*client]bool),
+		tracer:  trace.Off(),
 	}
 }
 
