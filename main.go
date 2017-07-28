@@ -45,8 +45,8 @@ func main() {
 	gomniauth.SetSecurityKey(*securityKey)
 	gomniauth.WithProviders(
 		facebook.New(facebookClientId, *facebookClientSecret, "http://localhost:8080/auth/callback/facebook"),
-		github.New(githubClientId, *githubClientSecret, "http://localhost:8080/auth/callback/facebook"),
-		google.New(googleClientId, *googleClientSecret, "http://localhost:8080/auth/callback/facebook"),
+		github.New(githubClientId, *githubClientSecret, "http://localhost:8080/auth/callback/github"),
+		google.New(googleClientId, *googleClientSecret, "http://localhost:8080/auth/callback/google"),
 	)
 
 	// チャットルームを作成
