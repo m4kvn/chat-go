@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <title>Chat-Go</title>
+    <style>
+        input {
+            display: block;
+        }
+
+        ul {
+            list-style: none;
+        }
+    </style>
 </head>
 <body>
-    Lets Chat!
+<ul id="messages"></ul>
+WebSocketを使ったチャットアプリケーション
+<form id="chatbox">
+    <label>
+        <textarea></textarea>
+    </label>
+    <input type="submit" value="送信">
+</form>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    $(function () {
+        var socket = null;
+        var msgBox = $("#chatox").find("textarea");
+        var messages = $("#messages");
+        $("#chatbox").submit(function () {
+            if (!msgBox.val()) return false;
+            if (!socket) {
+                alert("エラー：WebSocket接続が行われていません。");
+                return false;
+            }
+            socket.send(msgBox.val());
+            msgBox.val("");
+            return false;
+        });
+        if (!window["WebSocket"]) {
+            alert("エラー：WebSocketに対等していないブラウザです。");
+        } else {
+            socket = new WebSocket("ws:localhost:8080/room");
+            socket.onclose = function () {
+                alert("接続が終了しました。")
+            };
+            socket.onmessage = function (e) {
+                messages.append($("<li>").text(e.data));
+            };
+        }
+    });
+</script>
 </body>
 </html>
