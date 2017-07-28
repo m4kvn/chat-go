@@ -7,6 +7,8 @@ import (
 	"html/template"
 	"path/filepath"
 	"flag"
+	"chat-go/trace"
+	"os"
 )
 
 type templateHandler struct {
@@ -26,6 +28,7 @@ func main() {
 	addr := flag.String("addr", ":8080", "アプリケーションのアドレス")
 	flag.Parse() // フラグを解釈
 	r := newRoom()
+	r.tracer = trace.New(os.Stdout)
 	http.Handle("/", &templateHandler{filename: "chat.html"})
 	http.Handle("/room", r)
 	// チャットルームを開始
