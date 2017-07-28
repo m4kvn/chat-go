@@ -17,16 +17,14 @@
 <ul id="messages"></ul>
 WebSocketを使ったチャットアプリケーション
 <form id="chatbox">
-    <label>
-        <textarea></textarea>
-    </label>
+    <textarea id="textarea"></textarea>
     <input type="submit" value="送信">
 </form>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
     $(function () {
         var socket = null;
-        var msgBox = $("#chatox").find("textarea");
+        var msgBox = $("#textarea");
         var messages = $("#messages");
         $("#chatbox").submit(function () {
             if (!msgBox.val()) return false;
