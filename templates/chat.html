@@ -3,30 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Chat-Go</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <style>
-        input {
-            display: block;
+        ul#messages {
+            list-style: none;
         }
 
-        ul {
-            list-style: none;
+        ul#messages li {
+            margin-bottom: 2px;
+        }
+
+        ul#messages li img {
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
-<ul id="messages"></ul>
-WebSocketを使ったチャットアプリケーション
-<form id="chatbox">
-    {{.UserData.name}}<br/>
-    <textarea id="textarea"></textarea>
-    <input type="submit" value="送信">
-    または <a href="/logout">サインアウト</a>
-</form>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ul id="messages"></ul>
+        </div>
+    </div>
+    <form id="chatbox" role="form">
+        <div class="form-group">
+            <label for="messages">{{.UserData.name}}からのメッセージを送信</label>
+            または<a href="/logout">サインアウト</a>
+            <textarea id="message" class="form-control"></textarea>
+        </div>
+        <input type="submit" value="送信" class="btn btn-default"/>
+    </form>
+</div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>
     $(function () {
         var socket = null;
-        var msgBox = $("#textarea");
+        var msgBox = $("#message");
         var messages = $("#messages");
         $("#chatbox").submit(function () {
             if (!msgBox.val()) return false;
@@ -46,16 +63,14 @@ WebSocketを使ったチャットアプリケーション
                 alert("接続が終了しました。")
             };
             socket.onmessage = function (e) {
-                var msg = eval("(" + e.data + ")");
+                var msg = JSON.parse(e.data);
                 messages.append(
                     $("<li>").append(
-                        $("<img>").css({
+                        $("<img>").attr("title", msg.name).css({
                             width: 50,
                             verticalAlign: "middle"
                         }).attr("src", msg.AvatarURL),
-                        $("<strong>").text(msg.Name + ": "),
-                        $("<span>").text(msg.Message),
-                        $("<span>").text(" (" + msg.When + ")")
+                        $("<span>").text(msg.Message)
                     )
                 );
             };
